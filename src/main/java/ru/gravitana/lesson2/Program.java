@@ -106,7 +106,6 @@ public class Program {
 
     /**
      * Поверка на ничью (все ячейки игрового поля заполнены фишками человека или компьютера)
-     * @return
      */
     static boolean checkDraw(){
         for (int x = 0; x < fieldSizeX; x++){
@@ -188,7 +187,7 @@ public class Program {
     }
 
     public static void main(String[] args) {
-        while (true) {
+        do {
             initialize();
             printField();
             while (true) {
@@ -202,9 +201,7 @@ public class Program {
                     break;
             }
             System.out.print("Желаете сыграть еще раз? (Y - да): ");
-            if(!scanner.next().equalsIgnoreCase("Y"))
-                break;
-        }
+        } while (scanner.next().equalsIgnoreCase("Y"));
     }
 
 }
