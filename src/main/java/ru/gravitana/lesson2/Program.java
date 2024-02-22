@@ -7,21 +7,23 @@ public class Program {
 
     private static final char DOT_HUMAN = 'X';
     private static final char DOT_AI = '0';
-    private static final char DOT_EMPTY = '*';
+    private static final char DOT_EMPTY = '•';
     private static final Scanner scanner = new Scanner(System.in);
     private static final Random random = new Random();
     private static char[][] field;
     private static int fieldSizeX;
     private static int fieldSizeY;
+    private static int[] lustTurnCoordinates = new int[2];
 
     private static final int WIN_COUNT = 4; // Выигрышная комбинация
+    private static final int FIELD_SIZE = 5; // Размер поля
 
     /**
      * Инициализация объектов игры
      */
     static void initialize(){
-        fieldSizeX = 3;
-        fieldSizeY = 3;
+        fieldSizeX = FIELD_SIZE;
+        fieldSizeY = FIELD_SIZE;
         field = new char[fieldSizeX][fieldSizeY];
 
         for (int x = 0; x < fieldSizeX; x++){
@@ -62,12 +64,13 @@ public class Program {
         int x;
         int y;
         do {
-            System.out.print("Введите координаты хода X и Y\n(от 1 до 3) через пробел: ");
+            System.out.print("Введите координаты хода X и Y\n(от 1 до " + FIELD_SIZE + ") через пробел: ");
             x = scanner.nextInt() - 1;
             y = scanner.nextInt() - 1;
         }
         while (!isCellValid(x, y) || !isCellEmpty(x, y));
         field[x][y] = DOT_HUMAN;
+        lustTurnCoordinates = new int[]{x, y};
     }
 
     /**
@@ -82,6 +85,7 @@ public class Program {
         }
         while (!isCellEmpty(x, y));
         field[x][y] = DOT_AI;
+        lustTurnCoordinates = new int[]{x, y};
     }
 
     /**
@@ -117,54 +121,101 @@ public class Program {
     }
 
     /**
-     * TODO: Переработать в рамках домашней работы
      * Метод проверки победы
      * @param dot фишка игрока
      * @return результат проверки победы
      */
     static boolean checkWin(char dot){
-        // Проверка по трем горизонталям
-        if (field[0][0] == dot && field[0][1] == dot && field[0][2] == dot) return true;
-        if (field[1][0] == dot && field[1][1] == dot && field[1][2] == dot) return true;
-        if (field[2][0] == dot && field[2][1] == dot && field[2][2] == dot) return true;
+        int chainLen;
+        int lastX = lustTurnCoordinates[0];
+        int lastY = lustTurnCoordinates[1];
 
-        // Проверка по трем вертикалям
-        if (field[0][0] == dot && field[1][0] == dot && field[2][0] == dot) return true;
-        if (field[0][1] == dot && field[1][1] == dot && field[2][1] == dot) return true;
-        if (field[0][2] == dot && field[1][2] == dot && field[2][2] == dot) return true;
+        // Проверка горизонтали
+        chainLen = 0;
+        for (int x = 0; x < fieldSizeX; x++) {
+            if (field[x][lastY] == dot) {
+                    chainLen++;
+            } else {
+                chainLen = 0;
+            }
 
-        // Проверка по двум диагоналям
-        if (field[0][0] == dot && field[1][1] == dot && field[2][2] == dot) return true;
-        if (field[0][2] == dot && field[1][1] == dot && field[2][0] == dot) return true;
+            if (chainLen >= WIN_COUNT) {
+                return true;
+            }
+        }
+
+        // Проверка вертикали
+        chainLen = 0;
+        for (int y = 0; y < fieldSizeY; y++) {
+            if (field[lastX][y] == dot) {
+                chainLen++;
+            } else {
+                chainLen = 0;
+            }
+
+            if (chainLen >= WIN_COUNT) {
+                return true;
+            }
+        }
+
+        // Проверка диагонали "\"
+        chainLen = 0;
+        int delta1;
+        int delta2;
+
+        if (lastX < lastY) {
+            delta1 = lastX - 1;
+            delta2 = FIELD_SIZE - lastY;
+        } else {
+            delta1 = lastY - 1;
+            delta2 = FIELD_SIZE - lastX;
+        }
+        int xStart = lastX - delta1 - 1;
+        int yStart = lastY - delta1 - 1;
+        int xEnd = lastX + delta2 - 1;
+//        int yEnd = lastY + delta2 - 1;
+
+        for (int x = xStart, y = yStart; x < xEnd; x++, y++) {
+            if (field[x][y] == dot) {
+                chainLen++;
+            } else {
+                chainLen = 0;
+            }
+
+            if (chainLen >= WIN_COUNT) {
+                return true;
+            }
+        }
+
+        // Проверка диагонали "/"
+        chainLen = 0;
+        int xyKf = lastX + lastY;
+
+        xStart = xyKf;
+        yStart = 0;
+
+        if (xStart >= FIELD_SIZE) {
+            xStart = FIELD_SIZE - 1;
+            yStart = xyKf - xStart;
+        }
+
+//        System.out.println("lastX=" + lastX + " lastY=" + lastY);
+//        System.out.println("xStart=" + xStart + " yStart=" + yStart);
+
+        for (int x = xStart, y = yStart; x > 0 && y < FIELD_SIZE; x--, y++) {
+            if (field[x][y] == dot) {
+                chainLen++;
+            } else {
+                chainLen = 0;
+            }
+
+            if (chainLen >= WIN_COUNT) {
+                return true;
+            }
+        }
 
         return false;
     }
-
-//    static boolean checkWinV2(char dot){
-//        for (int x = 0; x < fieldSizeX; x++){
-//            for (int y = 0; y < fieldSizeY; y++){
-//
-//            }
-//        }
-//        return false;
-//    }
-
-//    static boolean check1(int x, int y, char dot, int win){
-//        //if (field[x][y + 1] == dot && field[x][y + 2] == dot && field[x][y + 3] == dot)
-//        return false;
-//    }
-
-//    static boolean check2(int x, int y, char dot, int win){
-//        return false;
-//    }
-
-//    static boolean check3(int x, int y, char dot, int win){
-//        return false;
-//    }
-
-//    static boolean check4(int x, int y, char dot, int win){
-//        return false;
-//    }
 
 
     /**
