@@ -141,31 +141,31 @@ public class Program {
         return false;
     }
 
-    static boolean checkWinV2(char dot){
-        for (int x = 0; x < fieldSizeX; x++){
-            for (int y = 0; y < fieldSizeY; y++){
+//    static boolean checkWinV2(char dot){
+//        for (int x = 0; x < fieldSizeX; x++){
+//            for (int y = 0; y < fieldSizeY; y++){
+//
+//            }
+//        }
+//        return false;
+//    }
 
-            }
-        }
-        return false;
-    }
+//    static boolean check1(int x, int y, char dot, int win){
+//        //if (field[x][y + 1] == dot && field[x][y + 2] == dot && field[x][y + 3] == dot)
+//        return false;
+//    }
 
-    static boolean check1(int x, int y, char dot, int win){
-        //if (field[x][y + 1] == dot && field[x][y + 2] == dot && field[x][y + 3] == dot)
-        return false;
-    }
+//    static boolean check2(int x, int y, char dot, int win){
+//        return false;
+//    }
 
-    static boolean check2(int x, int y, char dot, int win){
-        return false;
-    }
+//    static boolean check3(int x, int y, char dot, int win){
+//        return false;
+//    }
 
-    static boolean check3(int x, int y, char dot, int win){
-        return false;
-    }
-
-    static boolean check4(int x, int y, char dot, int win){
-        return false;
-    }
+//    static boolean check4(int x, int y, char dot, int win){
+//        return false;
+//    }
 
 
     /**
@@ -198,7 +198,7 @@ public class Program {
                     break;
                 aiTurn();
                 printField();
-                if (checkState(DOT_AI, "Вы победили!"))
+                if (checkState(DOT_AI, "Вы проиграли!"))
                     break;
             }
             System.out.print("Желаете сыграть еще раз? (Y - да): ");
