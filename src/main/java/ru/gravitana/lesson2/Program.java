@@ -41,9 +41,9 @@ public class Program {
         }
         System.out.println("-");
 
-        for (int x = 0; x < fieldSizeX; x++){
-            System.out.print(x + 1 + "|");
-            for (int y = 0; y < fieldSizeY; y++){
+        for (int y = 0; y < fieldSizeY; y++){
+            System.out.print(y + 1 + "|");
+            for (int x = 0; x < fieldSizeX; x++){
                 System.out.print(field[x][y] + "|");
             }
             System.out.println();
